@@ -1,10 +1,15 @@
 # saslprep
+[![Build Status](https://travis-ci.org/reklatsmasters/saslprep.svg?branch=master)](https://travis-ci.org/reklatsmasters/saslprep)
+[![npm](https://img.shields.io/npm/v/saslprep.svg)](https://npmjs.org/package/saslprep)
+[![node](https://img.shields.io/node/v/saslprep.svg)](https://npmjs.org/package/saslprep)
+[![license](https://img.shields.io/npm/l/saslprep.svg)](https://npmjs.org/package/saslprep)
+[![downloads](https://img.shields.io/npm/dm/saslprep.svg)](https://npmjs.org/package/saslprep)
 
 Stringprep Profile for User Names and Passwords, [rfc4013](https://tools.ietf.org/html/rfc4013)
 
 ### Usage
 
-```
+```js
 const saslprep = require('saslprep')
 
 saslprep('password\u00AD') // password
