@@ -1,6 +1,6 @@
 {
   "name": "saslprep",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SASLprep: Stringprep Profile for User Names and Passwords, rfc4013.",
   "main": "index.js",
   "scripts": {
