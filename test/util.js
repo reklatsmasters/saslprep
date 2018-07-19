@@ -1,5 +1,9 @@
+import { setFlagsFromString } from 'v8'
 import { range } from '../lib/util'
 import test from 'ava'
+
+// 984 by default.
+setFlagsFromString('--stack_size=500')
 
 test('should work', (t) => {
   const list = range(1, 3)
@@ -7,10 +11,5 @@ test('should work', (t) => {
 })
 
 test('should work for large ranges', (t) => {
-  const list = range(1, 1000000)
-  t.is(1000000, list.length)
-  list.reduce((previous, current) => {
-    t.is(previous + 1, current)
-    return current
-  }, 0)
+  t.notThrows(() => range(1, 1e6))
 })
