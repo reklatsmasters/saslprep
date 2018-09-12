@@ -7,7 +7,7 @@ const {
   prohibited_characters,
   bidirectional_r_al,
   bidirectional_l,
-} = require('./lib/code-points')
+} = require('./lib/memory-code-points')
 
 module.exports = saslprep
 
@@ -16,14 +16,12 @@ module.exports = saslprep
 /**
  * non-ASCII space characters [StringPrep, C.1.2] that can be
  * mapped to SPACE (U+0020)
- * @type {Set}
  */
 const mapping2space = non_ASCII_space_characters
 
 /**
  * the "commonly mapped to nothing" characters [StringPrep, B.1]
  * that can be mapped to nothing.
- * @type {Set}
  */
 const mapping2nothing = commonly_mapped_to_nothing
 
@@ -52,9 +50,9 @@ function saslprep(input, opts = {}) {
     .split('')
     .map(getCodePoint)
     // 1.1 mapping to space
-    .map(character => (mapping2space.has(character) ? 0x20 : character))
+    .map(character => (mapping2space.get(character) ? 0x20 : character))
     // 1.2 mapping to nothing
-    .filter(character => !mapping2nothing.has(character))
+    .filter(character => !mapping2nothing.get(character))
 
   // 2. Normalize
   const normalized_input = String.fromCodePoint(...mapped_input).normalize('NFKC')
@@ -63,7 +61,7 @@ function saslprep(input, opts = {}) {
 
   // 3. Prohibit
   const hasProhibited = normalized_map.some(character =>
-    prohibited_characters.has(character)
+    prohibited_characters.get(character)
   )
 
   if (hasProhibited) {
@@ -75,7 +73,7 @@ function saslprep(input, opts = {}) {
   // Unassigned Code Points
   if (opts.allowUnassigned !== true) {
     const hasUnassigned = normalized_map.some(character =>
-      unassigned_code_points.has(character)
+      unassigned_code_points.get(character)
     )
 
     if (hasUnassigned) {
@@ -88,10 +86,10 @@ function saslprep(input, opts = {}) {
   // 4. check bidi
 
   const hasBidiRAL = normalized_map
-    .some((character) => bidirectional_r_al.has(character))
+    .some((character) => bidirectional_r_al.get(character))
 
   const hasBidiL = normalized_map
-    .some((character) => bidirectional_l.has(character))
+    .some((character) => bidirectional_l.get(character))
 
   // 4.1 If a string contains any RandALCat character, the string MUST NOT
   // contain any LCat character.
@@ -108,8 +106,8 @@ function saslprep(input, opts = {}) {
    * RandALCat character MUST be the last character of the string.
    */
 
-  const isFirstBidiRAL = bidirectional_r_al.has(getCodePoint(first(normalized_input)))
-  const isLastBidiRAL = bidirectional_r_al.has(getCodePoint(last(normalized_input)))
+  const isFirstBidiRAL = bidirectional_r_al.get(getCodePoint(first(normalized_input)))
+  const isLastBidiRAL = bidirectional_r_al.get(getCodePoint(last(normalized_input)))
 
   if (hasBidiRAL && !(isFirstBidiRAL && isLastBidiRAL)) {
     throw new Error(
