@@ -13,6 +13,11 @@ test('should work be case preserved', (t) => {
   t.is(saslprep(str), str)
 })
 
+test('should work with high code points (> U+FFFF)', (t) => {
+  const str = '\ud83d\ude00'
+  t.is(saslprep(str, {allowUnassigned: true}), str)
+})
+
 test('should remove `mapped to nothing` characters', (t) => {
   t.is(saslprep('I\u00ADX'), 'IX')
 })

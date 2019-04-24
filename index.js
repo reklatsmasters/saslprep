@@ -46,8 +46,7 @@ function saslprep(input, opts = {}) {
   }
 
   // 1. Map
-  const mapped_input = input
-    .split('')
+  const mapped_input = Array.from(input)
     .map(getCodePoint)
     // 1.1 mapping to space
     .map(character => (mapping2space.get(character) ? 0x20 : character))
@@ -57,7 +56,7 @@ function saslprep(input, opts = {}) {
   // 2. Normalize
   const normalized_input = String.fromCodePoint(...mapped_input).normalize('NFKC')
 
-  const normalized_map = normalized_input.split('').map(getCodePoint)
+  const normalized_map = Array.from(normalized_input).map(getCodePoint)
 
   // 3. Prohibit
   const hasProhibited = normalized_map.some(character =>
