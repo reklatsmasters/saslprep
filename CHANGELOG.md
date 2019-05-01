@@ -3,7 +3,8 @@ All notable changes to the "saslprep" package will be documented in this file.
 
 ## [1.0.3] - 2019-05-01
 
-- Correctly get code points >U+FFFF ([#4](https://github.com/reklatsmasters/saslprep/issues/4))
+- Correctly get code points >U+FFFF ([#5](https://github.com/reklatsmasters/saslprep/pull/5))
+- Fix perfomance downgrades from [#5](https://github.com/reklatsmasters/saslprep/pull/5).
 
 ## [1.0.2] - 2018-09-13
 
