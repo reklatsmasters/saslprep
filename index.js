@@ -31,6 +31,36 @@ const first = x => x[0]
 const last = x => x[x.length - 1]
 
 /**
+ * Convert provided string into an array of Unicode Code Points.
+ * Based on https://stackoverflow.com/a/21409165/1556249
+ * And https://www.npmjs.com/package/code-point-at
+ * @param {string} input
+ * @returns {number[]}
+ */
+function toCodePoints(input) {
+  const codepoints = []
+  const size = input.length
+
+  for (let i = 0; i < size; ++i) {
+    const first = input.charCodeAt(i)
+
+    if (first >= 0xd800 && first <= 0xdbff && size > i + 1) {
+      const second = input.charCodeAt(i + 1)
+
+      if (second >= 0xdc00 && second <= 0xdfff) {
+        codepoints.push((first - 0xd800) * 0x400 + second - 0xdc00 + 0x10000)
+        ++i
+        continue
+      }
+    }
+
+    codepoints.push(first)
+  }
+
+  return codepoints
+}
+
+/**
  * SASLprep.
  * @param {string} input
  * @param {object} opts
@@ -46,17 +76,18 @@ function saslprep(input, opts = {}) {
   }
 
   // 1. Map
-  const mapped_input = Array.from(input)
-    .map(getCodePoint)
+  const mapped_input = toCodePoints(input)
     // 1.1 mapping to space
     .map(character => (mapping2space.get(character) ? 0x20 : character))
     // 1.2 mapping to nothing
     .filter(character => !mapping2nothing.get(character))
 
   // 2. Normalize
-  const normalized_input = String.fromCodePoint(...mapped_input).normalize('NFKC')
+  const normalized_input = String.fromCodePoint
+    .apply(null, mapped_input)
+    .normalize('NFKC')
 
-  const normalized_map = Array.from(normalized_input).map(getCodePoint)
+  const normalized_map = toCodePoints(normalized_input)
 
   // 3. Prohibit
   const hasProhibited = normalized_map.some(character =>
@@ -84,18 +115,20 @@ function saslprep(input, opts = {}) {
 
   // 4. check bidi
 
-  const hasBidiRAL = normalized_map
-    .some((character) => bidirectional_r_al.get(character))
+  const hasBidiRAL = normalized_map.some(character =>
+    bidirectional_r_al.get(character)
+  )
 
-  const hasBidiL = normalized_map
-    .some((character) => bidirectional_l.get(character))
+  const hasBidiL = normalized_map.some(character =>
+    bidirectional_l.get(character)
+  )
 
   // 4.1 If a string contains any RandALCat character, the string MUST NOT
   // contain any LCat character.
   if (hasBidiRAL && hasBidiL) {
     throw new Error(
       'String must not contain RandALCat and LCat at the same time,' +
-      ' see https://tools.ietf.org/html/rfc3454#section-6'
+        ' see https://tools.ietf.org/html/rfc3454#section-6'
     )
   }
 
@@ -105,13 +138,17 @@ function saslprep(input, opts = {}) {
    * RandALCat character MUST be the last character of the string.
    */
 
-  const isFirstBidiRAL = bidirectional_r_al.get(getCodePoint(first(normalized_input)))
-  const isLastBidiRAL = bidirectional_r_al.get(getCodePoint(last(normalized_input)))
+  const isFirstBidiRAL = bidirectional_r_al.get(
+    getCodePoint(first(normalized_input))
+  )
+  const isLastBidiRAL = bidirectional_r_al.get(
+    getCodePoint(last(normalized_input))
+  )
 
   if (hasBidiRAL && !(isFirstBidiRAL && isLastBidiRAL)) {
     throw new Error(
       'Bidirectional RandALCat character must be the first and the last' +
-      ' character of the string, see https://tools.ietf.org/html/rfc3454#section-6'
+        ' character of the string, see https://tools.ietf.org/html/rfc3454#section-6'
     )
   }
 
