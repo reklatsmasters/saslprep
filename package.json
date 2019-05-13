@@ -6,8 +6,7 @@
   "scripts": {
     "test": "npm run lint && npm run unit-test",
     "lint": "npx eslint --quiet .",
-    "unit-test": "npx jest",
-    "gen-code-points": "node generate-code-points.js > code-points.mem"
+    "unit-test": "npx jest"
   },
   "repository": {
     "type": "git",
