@@ -6,7 +6,7 @@ const {
   isNonASCIISpaceCharacter,
   isProhibitedCharacter,
   isBidirectionalRAL,
-  isBidirectionalL
+  isBidirectionalL,
 } = require('./lib/code-points');
 
 module.exports = saslprep;
