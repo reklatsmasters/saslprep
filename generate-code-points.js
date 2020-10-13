@@ -1,5 +1,6 @@
 'use strict';
 
+const zlib = require('zlib');
 const bitfield = require('sparse-bitfield');
 const codePoints = require('./lib/code-points');
 
@@ -48,4 +49,14 @@ memory.push(
   traverse(bidirectional_l, codePoints.bidirectional_l)
 );
 
-process.stdout.write(Buffer.concat(memory));
+process.stdout.write(
+  `'use strict';
+
+module.exports = require('zlib').gunzipSync(
+  Buffer.from(
+    '${zlib.gzipSync(Buffer.concat(memory), { level: 9 }).toString('base64')}',
+    'base64'
+  )
+);
+`
+);
