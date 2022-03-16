@@ -1,6 +1,6 @@
 'use strict';
 
-const zlib = require('zlib');
+const fflate = require('fflate');
 const bitfield = require('sparse-bitfield');
 const codePoints = require('./lib/code-points');
 
@@ -52,11 +52,11 @@ memory.push(
 process.stdout.write(
   `'use strict';
 
-module.exports = require('zlib').gunzipSync(
+module.exports = Buffer.from(require('fflate').gunzipSync(
   Buffer.from(
-    '${zlib.gzipSync(Buffer.concat(memory), { level: 9 }).toString('base64')}',
+    '${Buffer.from(fflate.gzipSync(Buffer.concat(memory), { level: 9 }).buffer).toString('base64')}',
     'base64'
   )
-);
+).buffer);
 `
 );
