@@ -3,6 +3,7 @@
   "version": "1.0.3",
   "description": "SASLprep: Stringprep Profile for User Names and Passwords, rfc4013.",
   "main": "index.js",
+  "browser": "./dist/saslprep.js",
   "scripts": {
     "build": "webpack",
     "test": "npm run lint && npm run unit-test",
@@ -37,9 +38,11 @@
   "homepage": "https://github.com/reklatsmasters/saslprep#readme",
   "devDependencies": {
     "@babel/core": "^7.17.7",
+    "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@nodertc/eslint-config": "^0.2.1",
     "babel-loader": "^8.2.3",
+    "buffer": "^6.0.3",
     "eslint": "^5.16.0",
     "fflate": "^0.7.3",
     "jest": "^27.5.1",
