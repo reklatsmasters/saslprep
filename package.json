@@ -51,7 +51,8 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
-    "sparse-bitfield": "^3.0.3"
+    "sparse-bitfield": "^3.0.3",
+    "fflate": "^0.7.3"
   },
   "eslintConfig": {
     "extends": "@nodertc",
