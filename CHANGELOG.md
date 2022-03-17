@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "saslprep" package will be documented in this file.
 
+## [1.0.4] - 2019-05-01
+
+- Added webpack build management
+- switched from zlib to fflate
+
 ## [1.0.3] - 2019-05-01
 
 - Correctly get code points >U+FFFF ([#5](https://github.com/reklatsmasters/saslprep/pull/5))

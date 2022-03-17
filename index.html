@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <title>Saslprep</title>
+  <script src="dist/saslprep.js" type="application/javascript"></script>
+</head>
+<body>
+<script type="application/javascript">
+  setTimeout(_ => {
+    if (window.saslprep) {
+      document.getElementById("out").innerText = "saslprep('I\u00ADX') -> " + window.saslprep('I\u00ADX') + "\n" +
+        "saslprep('a\u00A0b') -> " + window.saslprep('a\u00A0b') + "\n" +
+        "saslprep('\u00AA') -> " + window.saslprep('\u00AA') + "\n";
+    } else {
+      document.getElementById("out").innerText = "Please run 'npx webpack' first"
+    }
+  },100);
+</script>
+<pre id="out"></pre>
+</body>
+</html>

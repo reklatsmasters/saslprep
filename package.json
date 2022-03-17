@@ -3,11 +3,18 @@
   "version": "1.0.3",
   "description": "SASLprep: Stringprep Profile for User Names and Passwords, rfc4013.",
   "main": "index.js",
+  "browser": "./dist/saslprep.js",
   "scripts": {
+    "build": "webpack",
     "test": "npm run lint && npm run unit-test",
     "lint": "npx eslint --quiet .",
     "unit-test": "npx jest",
     "gen-code-points": "node generate-code-points.js > code-points.js"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   },
   "repository": {
     "type": "git",
@@ -30,13 +37,22 @@
   },
   "homepage": "https://github.com/reklatsmasters/saslprep#readme",
   "devDependencies": {
+    "@babel/core": "^7.17.7",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
     "@nodertc/eslint-config": "^0.2.1",
+    "babel-loader": "^8.2.3",
+    "buffer": "^6.0.3",
     "eslint": "^5.16.0",
-    "jest": "^23.6.0",
-    "prettier": "^1.14.3"
+    "fflate": "^0.7.3",
+    "jest": "^27.5.1",
+    "prettier": "^1.14.3",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
   },
   "dependencies": {
-    "sparse-bitfield": "^3.0.3"
+    "sparse-bitfield": "^3.0.3",
+    "fflate": "^0.7.3"
   },
   "eslintConfig": {
     "extends": "@nodertc",
